@@ -1,0 +1,34 @@
+﻿Option Explicit
+
+Sub Auto_Open()
+ 
+	Dim 파일 As String
+	Dim 파일번호 As Integer
+	Dim 한줄 As String
+	Dim 배열 As Variant
+	Dim i As Integer
+ 
+	파일 = ThisWorkbook.Path & "\" & "mem_statistics.csv"
+	파일번호 = FreeFile		' In VB you can open files and then manipulate them using FreeFile
+ 
+	Range("A1").CurrentRegion.ClearContents
+ 
+	Open 파일 For Input As #파일번호
+ 
+	Do Until EOF(파일번호)
+ 
+		Line Input #파일번호, 한줄
+		배열 = Split(한줄, ",")
+ 
+		With Range("A1").Offset(i)
+			.Resize(1, UBound(배열) + 1).Value = 배열	' UBound 함수는 배열의 크기를 반환한다.
+		End With
+ 
+		i = i + 1
+	Loop
+ 
+	Close #파일번호
+ 
+	Range("A1").CurrentRegion.Columns.AutoFit
+		
+End Sub
