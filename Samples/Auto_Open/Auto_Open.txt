@@ -13,7 +13,7 @@ Sub Auto_Open()
  
 	Range("A1").CurrentRegion.ClearContents
  
-	Open 파일 For Input As #파일번호
+	Open 불러_올_파일 For Input As #파일번호
  
 	Do Until EOF(파일번호)
  
