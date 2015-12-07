@@ -46,7 +46,7 @@ Sub Auto_Open()
 	End With
 
 	' Config_gathering에서 시스템 정보만 수집한 뒤 해당 파일을 닫는다.
-	Workbooks("201512071330_config_gathering.txt").Clear SaveChanges:=False
+	Workbooks("201512071330_config_gathering.txt").Close SaveChanges:=False
 
 	With Range("A99")
 		.Select
