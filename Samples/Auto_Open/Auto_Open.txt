@@ -39,6 +39,12 @@ Sub Auto_Open()
 		.Delete Shift:=xlShiftUp
 	End With
 
+	' Config_gathering의 시스템 정보 부분만 선택
+	With Range("A1:A36")
+		.Select
+		.Copy
+	End With
+
 	' Config_gathering에서 시스템 정보만 수집한 뒤 해당 파일을 닫는다.
 	Workbooks("201512071330_config_gathering.txt").Clear SaveChanges:=False
 
