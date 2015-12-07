@@ -30,5 +30,21 @@ Sub Auto_Open()
 	Close #파일번호
  
 	Range("A1").CurrentRegion.Columns.AutoFit
-		
+	
+	' Config_gathering의 불필요한 정보 삭제 (시스템 정보만 남기기 위한 작업)
+	Workbooks.Open Filename:="C:\Temp\201512071330_config_gathering.txt"
+
+	With Range("A37:A3000")
+		.Select
+		.Delete Shift:=xlShiftUp
+	End With
+
+	' Config_gathering에서 시스템 정보만 수집한 뒤 해당 파일을 닫는다.
+	Workbooks("201512071330_config_gathering.txt").Clear SaveChanges:=False
+
+	With Range("A99")
+		.Select
+		.EntireRow.Insert Shift:=xlShiftDown, CopyOrigin:=True
+	End With
+
 End Sub
