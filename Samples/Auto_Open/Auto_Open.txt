@@ -48,9 +48,11 @@ Sub Auto_Open()
 	' Config_gathering에서 시스템 정보만 수집한 뒤 해당 파일을 닫는다.
 	Workbooks("201512071330_config_gathering.txt").Close SaveChanges:=False
 
-	With Range("A99")
-		.Select
-		.EntireRow.Insert Shift:=xlShiftDown, CopyOrigin:=True
-	End With
+	'    With Range("A99")
+    '       .Select
+    '      .EntireRow.Insert Shift:=xlShiftDown, CopyOrigin:=True
+    ' End With
+			     
+	 ActiveSheet.Paste Destination:=Worksheets("Sheet1").Range("A100")
 
 End Sub
