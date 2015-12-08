@@ -1,58 +1,106 @@
 ﻿Option Explicit
+'Hyeongwan Seo <westporch@gmail.com>
+'Macro_Test.xlsm.txt파일은 Macro_test.xlsm의 VBA 소스를 txt로 정리한 것 입니다. _
+ 엑셀에서 전체 소스 확인 방법: Macro_Test.xlsm 실행 -> 개발자 도구 -> Visual Basic 항목 클릭.
 
+
+'엑셀 실행 시 호출되는 Auto_Open()을 재정의함.
 Sub Auto_Open()
  
-	Dim 불러_올_파일 As String
-	Dim 파일번호 As Integer
-	Dim 한줄 As String
-	Dim 배열 As Variant
-	Dim idx As Integer
- 
-	불러_올_파일 = ThisWorkbook.Path & "\" & "mem_statistics.csv"
-	파일번호 = FreeFile		' In VB you can open files and then manipulate them using FreeFile
- 
-	Range("A1").CurrentRegion.ClearContents
- 
-	Open 불러_올_파일 For Input As #파일번호
- 
-	Do Until EOF(파일번호)
- 
-		Line Input #파일번호, 한줄
-		배열 = Split(한줄, ",")
- 
-		With Range("A1").Offset(idx)
-			.Resize(1, UBound(배열) + 1).Value = 배열	' UBound 함수는 배열의 크기를 반환한다.
-		End With
- 
-		idx = idx + 1
-	Loop
- 
-	Close #파일번호
- 
-	Range("A1").CurrentRegion.Columns.AutoFit
-	
-	' Config_gathering의 불필요한 정보 삭제 (시스템 정보만 남기기 위한 작업)
-	Workbooks.Open Filename:="C:\Temp\201512071330_config_gathering.txt"
-
-	With Range("A37:A3000")
-		.Select
-		.Delete Shift:=xlShiftUp
-	End With
-
-	' Config_gathering의 시스템 정보 부분만 선택
-	With Range("A1:A36")
-		.Select
-		.Copy
-	End With
-
-	' Config_gathering에서 시스템 정보만 수집한 뒤 해당 파일을 닫는다.
-	Workbooks("201512071330_config_gathering.txt").Close SaveChanges:=False
-
-	'    With Range("A99")
-    '       .Select
-    '      .EntireRow.Insert Shift:=xlShiftDown, CopyOrigin:=True
-    ' End With
-			     
-	 ActiveSheet.Paste Destination:=Worksheets("Sheet1").Range("A100")
-
+   get_mem_statistics
+   get_Config_gathering_sysinfo
+   
+   Worksheets("Sheet1").Activate
+  
 End Sub
+
+Sub 시트_이름_변경()
+    
+    Dim 변경할_이름 As String
+    
+    변경할_이름 = "메모리_사용량_기록"
+    
+    If IsSheet(변경할_이름) = True Then
+        'MsgBox "동일한 시트명이 존재합니다."
+        Worksheets(변경할_이름).Activate
+    Else
+        Worksheets("Sheet2").Name = 변경할_이름
+    End If
+    
+End Sub
+
+Function IsSheet(시트명 As String) As Boolean
+    
+    Dim 시트 As Worksheet
+    
+    On Error Resume Next
+        Set 시트 = Worksheets(시트명)
+        IsSheet = (Err.Number = 0)      ' 리턴값이 저장됨.
+        
+End Function
+
+'메모리 사용량 파일의 데이터를 가져옴.
+Function get_mem_statistics()
+
+    Dim 불러_올_파일 As String
+    Dim 파일번호 As Integer
+    Dim 한줄 As String
+    Dim 배열 As Variant
+    Dim idx As Integer
+
+    'Sheet2의 이름을 변경함.
+    'With Worksheets("Sheet2")
+     '   .Activate
+     '   .Name = "메모리 사용량 기록"
+    'End With
+    
+    시트_이름_변경
+         
+    불러_올_파일 = ThisWorkbook.Path & "\" & "mem_statistics.csv"
+    파일번호 = FreeFile     ' In VB you can open files and then manipulate them using FreeFile
+ 
+    Range("A1").CurrentRegion.ClearContents
+ 
+    Open 불러_올_파일 For Input As #파일번호
+ 
+    Do Until EOF(파일번호)
+ 
+        Line Input #파일번호, 한줄
+        배열 = Split(한줄, ",")
+ 
+        With Range("A1").Offset(idx)
+            .Resize(1, UBound(배열) + 1).Value = 배열   ' UBound 함수는 배열의 크기를 반환한다.
+        End With
+ 
+        idx = idx + 1
+    Loop
+ 
+    Close #파일번호
+ 
+    Range("A1").CurrentRegion.Columns.AutoFit
+    
+End Function
+
+'Config_gathering의 시스템 정보를 가져옴
+Function get_Config_gathering_sysinfo()
+     ' Config_gathering의 불필요한 정보 삭제 (시스템 정보만 남기기 위한 작업)
+    Workbooks.Open Filename:="C:\Temp\201512071330_config_gathering.txt"
+       
+    With Range("A37:A3000")
+        .Select
+        .Delete Shift:=xlShiftUp
+    End With
+
+    ' Config_gathering의 시스템 정보 부분만 선택 후 복사
+    With Range("A1:A36")
+        .Select
+        .Copy
+    End With
+
+    ' Config_gathering에서 시스템 정보만 수집한 뒤 해당 파일을 닫는다.
+    Workbooks("201512071330_config_gathering.txt").Close SaveChanges:=False
+   
+   ' 복사한 셀을 붙여넣는다.
+   ActiveSheet.Paste Destination:=Worksheets("Sheet1").Range("A1")
+   
+End Function
