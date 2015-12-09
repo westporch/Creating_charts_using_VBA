@@ -79,7 +79,21 @@ Function get_mem_statistics()
  
     Range("A1").CurrentRegion.Columns.AutoFit
     
+    Convert_셀서식_to_숫자
+    
 End Function
+
+' 그래프를 그리기 위해서 수집한 데이터의 셀서식을 숫자로 변경해야 함.
+Function Convert_셀서식_to_숫자()
+
+    Range("B2:D100000").Select
+    With Selection
+        .NumberFormat = "0"
+        .Value = .Value
+    End With
+    
+End Function
+
 
 'Config_gathering의 시스템 정보를 가져옴
 Function get_Config_gathering_sysinfo()
