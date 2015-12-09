@@ -1,13 +1,15 @@
 ﻿Option Explicit
 'Hyeongwan Seo <westporch@gmail.com>
-'Macro_Test.xlsm.txt파일은 Macro_test.xlsm의 VBA 소스를 txt로 정리한 것 입니다. _
- 엑셀에서 전체 소스 확인 방법: Macro_Test.xlsm 실행 -> 개발자 도구 -> Visual Basic 항목 클릭.
+'Macro_Test.xlsm.txt파일은 Macro_test.xlsm의 VBA 소스를 txt로 정리한 것 입니다. _ 
+ 엑셀에서 전체 소스 확인 방법: Macro_Test.xlsm 실행 -> 개발자 도구 -> Visual Basic 항목 클릭. 
 
+Public idx As Integer
 
 '엑셀 실행 시 호출되는 Auto_Open()을 재정의함.
 Sub Auto_Open()
  
    get_mem_statistics
+   Draw_charts
    get_Config_gathering_sysinfo
    
    Worksheets("Sheet1").Activate
@@ -46,7 +48,8 @@ Function get_mem_statistics()
     Dim 파일번호 As Integer
     Dim 한줄 As String
     Dim 배열 As Variant
-    Dim idx As Integer
+    
+    'Dim idx As Integer
 
     'Sheet2의 이름을 변경함.
     'With Worksheets("Sheet2")
@@ -63,6 +66,8 @@ Function get_mem_statistics()
  
     Open 불러_올_파일 For Input As #파일번호
  
+    idx = 0                 ' 전역 변수 초기화
+    
     Do Until EOF(파일번호)
  
         Line Input #파일번호, 한줄
@@ -79,21 +84,23 @@ Function get_mem_statistics()
  
     Range("A1").CurrentRegion.Columns.AutoFit
     
-    Convert_셀서식_to_숫자
     
 End Function
 
-' 그래프를 그리기 위해서 수집한 데이터의 셀서식을 숫자로 변경해야 함.
-Function Convert_셀서식_to_숫자()
-
-    Range("B2:D100000").Select
+Function Draw_charts()
+   
+   ' 1. 수집한 데이터 만큼 셀 영역을 선택함.
+    Range(Cells(1, 2), Cells(idx, 4)).Select
+    
+    ' 2. 그래프를 그리기 위해서 선택한 셀 영역의 서식을 숫자로 변경함.
     With Selection
         .NumberFormat = "0"
         .Value = .Value
     End With
     
-End Function
+   ActiveSheet.Shapes.AddChart
 
+End Function
 
 'Config_gathering의 시스템 정보를 가져옴
 Function get_Config_gathering_sysinfo()
