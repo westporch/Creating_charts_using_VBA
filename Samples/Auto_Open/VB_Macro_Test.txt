@@ -9,7 +9,7 @@ Public idx As Integer
 Sub Auto_Open()
  
    get_mem_statistics
-   Draw_charts
+   차트를_그릴_영역_선택
    차트_생성_후_크기위치_변경
    차트_제목_설정
    get_Config_gathering_sysinfo
@@ -89,7 +89,7 @@ Function get_mem_statistics()
     
 End Function
 
-Function Draw_charts()
+Function 차트를_그릴_영역_선택()
    
    ' 1. 수집한 데이터 만큼 셀 영역을 선택함.
     Range(Cells(1, 2), Cells(idx, 4)).Select
@@ -124,26 +124,49 @@ Function 차트_생성_후_크기위치_변경()
             
         End With
         
+        'test
+        
+        '.SetElement msoElementChartTitleAboveChart
+        
+       ' With .ChartTitle
+        '    .Text = "메모리 사용량"
+         '   .Format.TextFrame2.TextRange.Font.Size = 14
+        'End With
+        
+        'end test
+        
     End With
     
 End Function
 
 Function 차트_제목_설정()
     
-    Dim 차트 As Chart
-    
-    Set 차트 = ActiveSheet.ChartObjects(1).Chart
-    
-    With 차트
+    With ActiveSheet.ChartObjects(1).Chart
         
-        .HasTitle = True
+        .SetElement msoElementChartTitleAboveChart
         
         With .ChartTitle
             .Text = "메모리 사용량"
             .Format.TextFrame2.TextRange.Font.Size = 14
         End With
-        
+    
     End With
+    
+    
+    'Dim 차트 As Chart
+    
+    'Set 차트 = ActiveSheet.ChartObjects(1).Chart
+    
+    'With 차트
+        
+     '   .HasTitle = True
+        
+      '  With .ChartTitle
+       '     .Text = "메모리 사용량"
+        '    .Format.TextFrame2.TextRange.Font.Size = 14
+        'End With
+        
+    'End With
     
 End Function
 
