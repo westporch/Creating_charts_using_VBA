@@ -1,15 +1,16 @@
 ﻿Option Explicit
 'Hyeongwan Seo <westporch@gmail.com>
-'Macro_Test.xlsm.txt파일은 Macro_test.xlsm의 VBA 소스를 txt로 정리한 것 입니다. _ 
- 엑셀에서 전체 소스 확인 방법: Macro_Test.xlsm 실행 -> 개발자 도구 -> Visual Basic 항목 클릭. 
-
+'Macro_Test.xlsm.txt파일은 Macro_test.xlsm의 VBA 소스를 txt로 정리한 것 입니다. _
+ 엑셀에서 전체 소스 확인 방법: Macro_Test.xlsm 실행 -> 개발자 도구 -> Visual Basic 항목 클릭.
 Public idx As Integer
+
 
 '엑셀 실행 시 호출되는 Auto_Open()을 재정의함.
 Sub Auto_Open()
  
    get_mem_statistics
    Draw_charts
+   차트_생성_후_크기위치_변경
    get_Config_gathering_sysinfo
    
    Worksheets("Sheet1").Activate
@@ -98,8 +99,32 @@ Function Draw_charts()
         .Value = .Value
     End With
     
-   ActiveSheet.Shapes.AddChart
+   ' With ActiveSheet
+    '    .Shapes.AddChart
+     '   .ChartObjects(1).Chart.ChartType = xlLineMarkers    ' 차트 종류를 변경함
+    'End With
 
+End Function
+
+Function 차트_생성_후_크기위치_변경()
+
+    Dim 차트생성위치 As Range
+    Set 차트생성위치 = Range("F2:T19")
+    ActiveSheet.Shapes.AddChart.Select
+    
+    With ActiveChart
+        .ChartType = xlLineMarkers
+        
+        With .Parent
+            .Left = 차트생성위치.Left
+            .Top = 차트생성위치.Top
+            .Width = 차트생성위치.Width
+            .Height = 차트생성위치.Height
+            
+        End With
+        
+    End With
+    
 End Function
 
 'Config_gathering의 시스템 정보를 가져옴
@@ -125,3 +150,4 @@ Function get_Config_gathering_sysinfo()
    ActiveSheet.Paste Destination:=Worksheets("Sheet1").Range("A1")
    
 End Function
+
