@@ -11,6 +11,7 @@ Sub Auto_Open()
    get_mem_statistics
    Draw_charts
    차트_생성_후_크기위치_변경
+   차트_제목_설정
    get_Config_gathering_sysinfo
    
    Worksheets("Sheet1").Activate
@@ -127,6 +128,25 @@ Function 차트_생성_후_크기위치_변경()
     
 End Function
 
+Function 차트_제목_설정()
+    
+    Dim 차트 As Chart
+    
+    Set 차트 = ActiveSheet.ChartObjects(1).Chart
+    
+    With 차트
+        
+        .HasTitle = True
+        
+        With .ChartTitle
+            .Text = "메모리 사용량"
+            .Format.TextFrame2.TextRange.Font.Size = 14
+        End With
+        
+    End With
+    
+End Function
+
 'Config_gathering의 시스템 정보를 가져옴
 Function get_Config_gathering_sysinfo()
      ' Config_gathering의 불필요한 정보 삭제 (시스템 정보만 남기기 위한 작업)
@@ -150,4 +170,3 @@ Function get_Config_gathering_sysinfo()
    ActiveSheet.Paste Destination:=Worksheets("Sheet1").Range("A1")
    
 End Function
-
