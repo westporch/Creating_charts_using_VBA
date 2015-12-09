@@ -113,7 +113,7 @@ Function 차트_생성_후_크기위치_변경()
     ActiveSheet.Shapes.AddChart.Select
     
     With ActiveChart
-        .ChartType = xlLineMarkers
+        .ChartType = xlLine
         
         With .Parent
             .Left = 차트생성위치.Left
