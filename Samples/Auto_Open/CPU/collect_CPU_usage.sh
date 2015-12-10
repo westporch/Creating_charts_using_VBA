@@ -52,16 +52,6 @@ function print_data()
 	done
 }
 
-#function print_data()
-#{
-#    for ((;;))
-#    do
-#        get_data
-#        echo "$DAY-$MONTH-$YEAR $HOUR:$MINUTE:$SECOND +0009,$USER,$NICE,$SYSTEM,$IOWAIT,$STEAL,$IDLE" >> $CPU_STATISTICS
-#		sleep 2s
-#    done
-#}
-
 function init_document()
 {
     if [ -e $CPU_STATISTICS ]; then
@@ -99,11 +89,9 @@ function process_check()
     fi
 }
 
-#mpstat_check
-#process_check
+sar_check
+process_check
 init_document 
-
-#print_data #test
 
 if [ "$1" == "stop" ];then
     pkill collect_CPU_usage.sh   # 데이터 수집을 중지함
