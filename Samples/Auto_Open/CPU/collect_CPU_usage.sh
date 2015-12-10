@@ -2,18 +2,18 @@
 #Hyeongwan Seo
 
 CPU_STATISTICS=cpu_statistics.csv
-MPSTAT_RESULT=mpstat_result.txt
+SAR_RESULT=sar_result.txt
 CPU_CORE_NUM=`cat /proc/cpuinfo | grep -c processor`
 MAX_ITER=`expr $CPU_CORE_NUM - 1`
 
-#시스템에 mpstat가 설치되었는지 확인함.
-function mpstat_check()
+#시스템에 sar가 설치되었는지 확인함.
+function sar_check()
 {
-    if [ -e "/usr/bin/mpstat" ]; then
-        echo -e "mpstat 설치 확인:             [  \e[1;32mOK\e[0m  ]"
+    if [ -e "/usr/bin/sar" ]; then
+        echo -e "sar 설치 확인:             [  \e[1;32mOK\e[0m  ]"
     else
-        echo -e "mpstat 설치 확인:       	      [  \e[1;31mFAIL\e[0m  ]"
-        echo "\e[1;31mmpstat를 설치해야 데이터 수집이 가능합니다.\e[0m"
+        echo -e "sar 설치 확인:       	      [  \e[1;31mFAIL\e[0m  ]"
+        echo "\e[1;31msar를 설치해야 데이터 수집이 가능합니다.\e[0m"
 		echo "\e[1;31m(apt-get install sysstat OR yum install sysstat)\e[0m"
         exit
     fi  
@@ -23,14 +23,15 @@ function mpstat_check()
 function print_data()
 {
 	#CPU 정보를 수집함
-	mpstat -P ALL > $MPSTAT_RESULT
+	sar -P ALL 1 1 > $SAR_RESULT
 
 	for ((idx=1; idx <= $CPU_CORE_NUM; idx++))
 	do
-		cpu_core_usage[$idx]=`cat $MPSTAT_RESULT | sed -e '1,4d' | awk '{print $4+$5+$6}' | head -n $idx | tail -n 1`	
+		#cpu_core_usage[$idx]=`cat $SAR_RESULT | sed -e '1,4d' | awk '{print $4+$5+$6}' | head -n $idx | tail -n 1`	
+		cpu_core_usage[$idx]=`cat $SAR_RESULT | sed -e '1,4d' -e '21,39d' | awk '{print $4+$5}' | head -n $idx | tail -n 1`	
 	done
 
-	rm -rf $MPSTAT_RESULT	#mpstat 명령어 수집 정보를 삭제함.
+	rm -rf $SAR_RESULT	#sar 명령어 수집 정보를 삭제함.
 
 	#데이터 출력 테스트
 	for ((i=1; i <= $CPU_CORE_NUM; i++))
