@@ -22,29 +22,34 @@ function sar_check()
 
 function print_data()
 {
-	#CPU 정보를 수집함
-	sar -P ALL 1 1 > $SAR_RESULT
-
-	for ((idx=1; idx <= $CPU_CORE_NUM; idx++))
-	do
-		#cpu_core_usage[$idx]=`cat $SAR_RESULT | sed -e '1,4d' | awk '{print $4+$5+$6}' | head -n $idx | tail -n 1`	
-		cpu_core_usage[$idx]=`cat $SAR_RESULT | sed -e '1,4d' -e '21,39d' | awk '{print $4+$5}' | head -n $idx | tail -n 1`	
-	done
-
-	rm -rf $SAR_RESULT	#sar 명령어 수집 정보를 삭제함.
-
-	#데이터 출력 테스트
-	for ((i=1; i <= $CPU_CORE_NUM; i++))
+	for ((;;))
 	do
 
-		if [ $i -eq $CPU_CORE_NUM ]; then
-                printf "${cpu_core_usage[$i]}" >> $CPU_STATISTICS
-            else
-                printf "${cpu_core_usage[$i]}," >> $CPU_STATISTICS
+		#CPU 정보를 수집함
+		sar -P ALL 1 1 > $SAR_RESULT
+
+		for ((idx=1; idx <= $CPU_CORE_NUM; idx++))
+		do
+			cpu_core_usage[$idx]=`cat $SAR_RESULT | sed -e '1,4d' -e '21,39d' | awk '{print $4+$5}' | head -n $idx | tail -n 1`	
+		done
+
+		rm -rf $SAR_RESULT	#sar 명령어 수집 정보를 삭제함.
+
+		#데이터 출력 테스트
+		for ((i=1; i <= $CPU_CORE_NUM; i++))
+		do
+
+			if [ $i -eq $CPU_CORE_NUM ]; then
+           	    printf "${cpu_core_usage[$i]}" >> $CPU_STATISTICS
+           	else
+                printf "${cpu_core_usage[$i]}," >> $CPU_STATISTICS #마지막 CPU 코어에는 쉼표(,)를 붙이지 않음.
             fi  
-	done
+		done
 	
-	echo "" >> $CPU_STATISTICS
+		echo "" >> $CPU_STATISTICS	# 새로운 행에 코어 별 CPU 사용 정보를 기록하기 위해서 line break 함.
+
+		sleep 2s 
+	done
 }
 
 #function print_data()
@@ -68,7 +73,7 @@ function init_document()
     		if [ $idx -eq $MAX_ITER ]; then
         		printf "core$idx" >> $CPU_STATISTICS
     		else
-        		printf "core$idx," >> $CPU_STATISTICS
+        		printf "core$idx," >> $CPU_STATISTICS	#마지막 CPU 코어에는 쉼표(,)를 붙이지 않음.
     		fi  
 
 		done
@@ -98,11 +103,11 @@ function process_check()
 #process_check
 init_document 
 
-print_data #test
+#print_data #test
 
 if [ "$1" == "stop" ];then
     pkill collect_CPU_usage.sh   # 데이터 수집을 중지함
 else
-    #print_data
+    print_data
 	:
 fi
