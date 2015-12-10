@@ -20,7 +20,7 @@ function mpstat_check()
 }
 
 
-function get_data()
+function print_data()
 {
 	#CPU 정보를 수집함
 	mpstat -P ALL > $MPSTAT_RESULT
@@ -30,26 +30,31 @@ function get_data()
 		cpu_core_usage[$idx]=`cat $MPSTAT_RESULT | sed -e '1,4d' | awk '{print $4+$5+$6}' | head -n $idx | tail -n 1`	
 	done
 
-	#for ((i=1; i <= $CPU_CORE_NUM; i++))
-	#do
-	#	echo ${cpu_core_usage[$i]}
-	#done
-	
-	
+	rm -rf $MPSTAT_RESULT	#mpstat 명령어 수집 정보를 삭제함.
 
+	#데이터 출력 테스트
+	for ((i=1; i <= $CPU_CORE_NUM; i++))
+	do
 
-	rm -rf $SAR_RESULT
+		if [ $i -eq $CPU_CORE_NUM ]; then
+                printf "${cpu_core_usage[$i]}" >> $CPU_STATISTICS
+            else
+                printf "${cpu_core_usage[$i]}," >> $CPU_STATISTICS
+            fi  
+	done
+	
+	echo "" >> $CPU_STATISTICS
 }
 
-function print_data()
-{
-    for ((;;))
-    do
-        get_data
-        echo "$DAY-$MONTH-$YEAR $HOUR:$MINUTE:$SECOND +0009,$USER,$NICE,$SYSTEM,$IOWAIT,$STEAL,$IDLE" >> $CPU_STATISTICS
-		sleep 2s
-    done
-}
+#function print_data()
+#{
+#    for ((;;))
+#    do
+#        get_data
+#        echo "$DAY-$MONTH-$YEAR $HOUR:$MINUTE:$SECOND +0009,$USER,$NICE,$SYSTEM,$IOWAIT,$STEAL,$IDLE" >> $CPU_STATISTICS
+#		sleep 2s
+#    done
+#}
 
 function init_document()
 {
@@ -92,7 +97,7 @@ function process_check()
 #process_check
 init_document 
 
-get_data #test
+print_data #test
 
 if [ "$1" == "stop" ];then
     pkill collect_CPU_usage.sh   # 데이터 수집을 중지함
