@@ -22,27 +22,18 @@ function mpstat_check()
 
 function get_data()
 {
-	#날짜 및 시간 정보를 수집함
-	WEEK=`date +%W`
-    YEAR=`date +%Y`
-    MONTH=`date +%m`
-    DAY=`date +%d`
-    HOUR=`date +%H`
-    MINUTE=`date +%M`
-    SECOND=`date +%S`
-
 	#CPU 정보를 수집함
 	mpstat -P ALL > $MPSTAT_RESULT
 
 	for ((idx=1; idx <= $CPU_CORE_NUM; idx++))
 	do
-		core_usage[$idx]=`cat $MPSTAT_RESULT | sed -e '1,4d' | awk '{print $4+$5+$6}' | head -n $idx | tail -n 1`	
+		cpu_core_usage[$idx]=`cat $MPSTAT_RESULT | sed -e '1,4d' | awk '{print $4+$5+$6}' | head -n $idx | tail -n 1`	
 	done
 
-	for ((i=0; i < core_num; i++))
-	do
-		echo ${core_usage[$idx]},
-	done
+	#for ((i=1; i <= $CPU_CORE_NUM; i++))
+	#do
+	#	echo ${cpu_core_usage[$i]}
+	#done
 	
 	
 
@@ -100,6 +91,8 @@ function process_check()
 #mpstat_check
 #process_check
 init_document 
+
+get_data #test
 
 if [ "$1" == "stop" ];then
     pkill collect_CPU_usage.sh   # 데이터 수집을 중지함
