@@ -35,7 +35,7 @@ function print_data()
 
 		rm -rf $SAR_RESULT	#sar 명령어 수집 정보를 삭제함.
 
-		#데이터 출력 테스트
+		#데이터를 출력함
 		for ((i=1; i <= $CPU_CORE_NUM; i++))
 		do
 
