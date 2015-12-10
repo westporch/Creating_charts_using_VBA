@@ -65,12 +65,10 @@ function init_document()
     if [ -e $CPU_STATISTICS ]; then
         :       #NOP (csv 파일이 존재하면 init_document 함수를 실행하지 않음)
     else
-        #echo "Timestamp,User,Nice,System,Iowait,Steal,Idle" > $CPU_STATISTICS
-		
-		for ((idx=0; idx < 16; idx++))
+		for ((idx=0; idx < $CPU_CORE_NUM; idx++))
 		do
     
-    		if [ $idx -eq 15 ]; then
+    		if [ $idx -eq $MAX_ITER ]; then
         		printf "core$idx" >> $CPU_STATISTICS
     		else
         		printf "core$idx," >> $CPU_STATISTICS
@@ -78,7 +76,7 @@ function init_document()
 
 		done
    
-	 echo "" >> $CPU_STATISTICS
+		 echo "" >> $CPU_STATISTICS
 
     fi
 }
