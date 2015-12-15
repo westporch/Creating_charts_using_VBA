@@ -8,9 +8,13 @@ ps -eo psr,pcpu,comm | sort -k 1 > $PS_RESULT 	# 실행 결과를 txt 파일에 
 
 for ((idx=0; idx < $MAX_CORE; idx++))
 do
-	echo "=== core$idx ==="
-	cat $PS_RESULT| sort -k 1 | awk '$1=='"${idx}"' {print $2}'
-	echo "==================================="
+	cat $PS_RESULT| sort -k 1 | awk '$1=='"${idx}"' {print $2}' > core$idx.txt
+	readarray -t core$idx < core$idx.txt
+done
+
+for ((i=0; i < ${#core1[@]}; i++))
+do
+	echo "${core1[$i]}"
 done
 
 
