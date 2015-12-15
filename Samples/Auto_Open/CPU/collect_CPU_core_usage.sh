@@ -19,12 +19,12 @@ do
 	하나의 프로세스가 여러 쓰레드로 되어있고, 각 쓰레드가 서로 다른 코어에 스케쥴링 되어
 	동시에 실행하는 순간에 코어의 사용률이 100%이상이 된다.
 	'
-	if [ $total_per_core == 100 ]; then
+	if [ $total_per_core > 100 ]; then
 		total_per_core=100
 	fi
 
 	echo -e "core$idx total usage: $total_per_core%"
-	total_per_core=0
+	total_per_core=0	# 초기화
 
 done
 
