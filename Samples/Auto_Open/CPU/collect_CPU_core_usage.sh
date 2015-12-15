@@ -10,11 +10,16 @@ for ((idx=0; idx < $MAX_CORE; idx++))
 do
 	cat $PS_RESULT| sort -k 1 | awk '$1=='"${idx}"' {print $2}' > core$idx.txt
 	readarray -t core$idx < core$idx.txt
+	
+	total_per_core=`cat core$idx.txt | awk '{SUM += $1} END {print SUM}'`
+	echo -e "core$idx total usage: $total_per_core%"
+	total_per_core=0
+
 done
 
-for ((i=0; i < ${#core1[@]}; i++))
-do
-	echo "${core1[$i]}"
-done
+#for ((i=0; i < ${#core1[@]}; i++))
+#do
+#	echo "${core1[$i]}"
+#done
 
 
