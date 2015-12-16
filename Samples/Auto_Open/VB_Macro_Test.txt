@@ -7,29 +7,32 @@ Public idx As Integer
 
 '엑셀 실행 시 호출되는 Auto_Open()을 재정의함.
 Sub Auto_Open()
- 
+    
+   시트2_이름_변경
    get_mem_statistics
-   차트를_그릴_영역_선택
-   차트_생성_후_크기위치_변경
-   차트_제목_설정
-   생성된_차트를_메인시트에_복사
+   mem차트를_그릴_영역_선택
+   mem차트_생성_후_크기위치_변경
+   mem차트_제목_설정
+   생성된_mem차트를_메인시트에_복사
+   
+   
    get_Config_gathering_sysinfo
    
    Worksheets("Sheet1").Activate
   
 End Sub
 
-Sub 시트_이름_변경()
+Sub 시트2_이름_변경()
     
-    Dim 변경할_이름 As String
+    Dim Sheet2_이름_변경 As String
     
-    변경할_이름 = "메모리_사용량_기록"
+    Sheet2_이름_변경 = "메모리_사용량_기록"
     
-    If IsSheet(변경할_이름) = True Then
+    If IsSheet(Sheet2_이름_변경) = True Then
         'MsgBox "동일한 시트명이 존재합니다."
-        Worksheets(변경할_이름).Activate
+        Worksheets(Sheet2_이름_변경).Activate
     Else
-        Worksheets("Sheet2").Name = 변경할_이름
+        Worksheets("Sheet2").Name = Sheet2_이름_변경
     End If
     
 End Sub
@@ -59,8 +62,6 @@ Function get_mem_statistics()
      '   .Activate
      '   .Name = "메모리 사용량 기록"
     'End With
-    
-    시트_이름_변경
          
     불러_올_파일 = ThisWorkbook.Path & "\" & "mem_statistics.csv"
     파일번호 = FreeFile     ' In VB you can open files and then manipulate them using FreeFile
@@ -90,7 +91,7 @@ Function get_mem_statistics()
     
 End Function
 
-Function 차트를_그릴_영역_선택()
+Function mem차트를_그릴_영역_선택()
    
    ' 1. 수집한 데이터 만큼 셀 영역을 선택함.
     Range(Cells(1, 2), Cells(idx, 4)).Select
@@ -108,7 +109,7 @@ Function 차트를_그릴_영역_선택()
 
 End Function
 
-Function 차트_생성_후_크기위치_변경()
+Function mem차트_생성_후_크기위치_변경()
 
     Dim 차트생성위치 As Range
     Set 차트생성위치 = Range("F2:Q19")
@@ -130,7 +131,7 @@ Function 차트_생성_후_크기위치_변경()
     
 End Function
 
-Function 차트_제목_설정()
+Function mem차트_제목_설정()
     
     With ActiveSheet.ChartObjects(1).Chart
         
@@ -145,7 +146,7 @@ Function 차트_제목_설정()
     
 End Function
 
-Function 생성된_차트를_메인시트에_복사()
+Function 생성된_mem차트를_메인시트에_복사()
 
      ' 메모리_사용량_기록 시트의 차트를 Sheet1에 복사함.
     Worksheets("메모리_사용량_기록").Activate
@@ -181,3 +182,5 @@ Function get_Config_gathering_sysinfo()
    ActiveSheet.Paste Destination:=Worksheets("Sheet1").Range("A1")
    
 End Function
+
+
