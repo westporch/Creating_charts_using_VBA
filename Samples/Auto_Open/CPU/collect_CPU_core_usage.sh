@@ -17,20 +17,20 @@ do
 	하나의 프로세스가 여러 쓰레드로 되어있고, 각 쓰레드가 서로 다른 코어에 스케쥴링 되어
 	동시에 실행하는 순간에 코어의 사용률이 100%이상이 된다.
 	'
+	#AWK로 출력 포맷을 설정함
+	awk '
+	BEGIN {
+    	#printf("%2s %4s(%%) %10s\n", "Core", "Percent", "Chart") 
+    	printf("%2d %5.1f(%%)", "'"$idx"'", "'"$total_per_core"'")  # core 번호 및 core 사용률을 출력함
 
-	#echo -e "core$idx total usage: $total_per_core% "
-	printf "core %2d: %3.1f %%\n" "$idx" "$total_per_core"
-	total_per_core=0	# 초기화
+    	printf("         ")
+    
+		# bar 차트를 그림
+    	for(i=0; i < int("'"$total_per_core"'"); i++)
+    	{   
+        	printf("*")
+    	}; 
+    	printf("\n") 
+	}'  
 
 done
-
-#AWK로 출력 포맷을 설정함
-awk '
-BEGIN {
-    printf("%2s %4s(%%) %10s\n", "Core", "Percent", "test") 
-    
-    for(i=0; i<10; i++)
-    {   
-        printf("+")
-    };  
-}'
