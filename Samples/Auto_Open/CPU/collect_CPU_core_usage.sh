@@ -11,7 +11,8 @@ function set_header()
 {
 	awk '
 	BEGIN {
-		printf("%2s %4s(%%) %10s\n", "Core", "Percent", "Chart") 
+		printf("\n%2s %5s(%%) %10s\n", "Core", "Percent", "\tBar chart") 
+		printf("=================================================\n")
 	}'
 }
 
@@ -36,9 +37,9 @@ do
     	printf("         ")
     
 		# bar 차트를 그림
-    	for(i=0; i < int("'"$total_per_core"'"); i++)
+    	for(i=0; i < int("'"$total_per_core"'"/10); i++)
     	{   
-        	printf("*")
+        	printf(".")
     	}; 
     	printf("\n") 
 	}'  
