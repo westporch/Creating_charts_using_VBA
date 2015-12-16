@@ -1,5 +1,6 @@
 ﻿Option Explicit
 'Hyeongwan Seo <westporch@gmail.com>
+'https://github.com/westporch/Creating_charts_using_VBA.git
 'Macro_Test.xlsm.txt파일은 Macro_test.xlsm의 VBA 소스를 txt로 정리한 것 입니다. _
  엑셀에서 전체 소스 확인 방법: Macro_Test.xlsm 실행 -> 개발자 도구 -> Visual Basic 항목 클릭.
 Public idx As Integer
@@ -8,7 +9,7 @@ Public idx As Integer
 '엑셀 실행 시 호출되는 Auto_Open()을 재정의함.
 Sub Auto_Open()
     
-   시트2_이름_변경
+   시트_이름_변경
    get_mem_statistics
    mem차트를_그릴_영역_선택
    mem차트_생성_후_크기위치_변경
@@ -18,16 +19,19 @@ Sub Auto_Open()
    
    get_Config_gathering_sysinfo
    
-   Worksheets("Sheet1").Activate
   
 End Sub
 
-Sub 시트2_이름_변경()
+
+Function 시트_이름_변경()
     
     Dim Sheet2_이름_변경 As String
+    Dim Sheet3_이름_변경 As String
     
     Sheet2_이름_변경 = "메모리_사용량_기록"
+    Sheet3_이름_변경 = "CPU_사용량_기록"
     
+    '시트2 이름 변경
     If IsSheet(Sheet2_이름_변경) = True Then
         'MsgBox "동일한 시트명이 존재합니다."
         Worksheets(Sheet2_이름_변경).Activate
@@ -35,7 +39,16 @@ Sub 시트2_이름_변경()
         Worksheets("Sheet2").Name = Sheet2_이름_변경
     End If
     
-End Sub
+    
+    '시트3 이름 변경
+    If IsSheet(Sheet3_이름_변경) = True Then
+        'MsgBox "동일한 시트명이 존재합니다."
+        Worksheets(Sheet3_이름_변경).Activate
+    Else
+        Worksheets("Sheet3").Name = Sheet3_이름_변경
+    End If
+    
+End Function
 
 Function IsSheet(시트명 As String) As Boolean
     
@@ -157,6 +170,7 @@ Function 생성된_mem차트를_메인시트에_복사()
     ActiveSheet.Paste
 
 End Function
+
 
 
 'Config_gathering의 시스템 정보를 가져옴
