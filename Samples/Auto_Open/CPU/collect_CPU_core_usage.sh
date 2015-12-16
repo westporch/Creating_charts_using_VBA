@@ -23,3 +23,14 @@ do
 	total_per_core=0	# 초기화
 
 done
+
+#AWK로 출력 포맷을 설정함
+awk '
+BEGIN {
+    printf("%2s %4s(%%) %10s\n", "Core", "Percent", "test") 
+    
+    for(i=0; i<10; i++)
+    {   
+        printf("+")
+    };  
+}'
