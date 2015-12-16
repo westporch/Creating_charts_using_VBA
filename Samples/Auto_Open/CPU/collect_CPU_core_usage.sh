@@ -4,18 +4,17 @@
 PS_RESULT=ps_result.txt
 MAX_CORE=`cat /proc/cpuinfo | grep -c processor`
 
-ps -eo psr,pcpu,comm | sort -k 1 > $PS_RESULT 	# 실행 결과를 txt 파일에 저장함.
-
 #출력 결과의 header 설정
 function set_header()
 {
 	awk '
 	BEGIN {
-		printf("\n%2s %5s(%%) %10s\n", "Core", "Percent", "\tBar chart") 
-		printf("=================================================\n")
+		printf("\n%2s %5s(%%) %10s \n", "Core", "Percent", "\tBar chart") 
+		printf("=====================================================================================\n")
 	}'
 }
 
+ps -eo psr,pcpu,comm | sort -k 1 > $PS_RESULT 	# 실행 결과를 txt 파일에 저장함.
 set_header
 
 for ((idx=0; idx < $MAX_CORE; idx++))
@@ -32,16 +31,18 @@ do
 	#AWK로 출력 포맷을 설정함
 	awk '
 	BEGIN {
-    	printf("%2d %5.1f(%%)", "'"$idx"'", "'"$total_per_core"'")  # core 번호 및 core 사용률을 출력함
+    	printf("%2d %5.1f%%", "'"$idx"'", "'"$total_per_core"'")  # core 번호 및 core 사용률을 출력함
 
     	printf("         ")
     
-		# bar 차트를 그림
+		# bar 차트를 출력함
     	for(i=0; i < int("'"$total_per_core"'"/10); i++)
     	{   
-        	printf(".")
+        	printf("■") 	# 10% -> ■ 1개
     	}; 
     	printf("\n") 
-	}'  
 
+		#if ($2 > 0) { printf("%s (%d%%)\n", $3, $2) } 
+		#get_ps_name
+	}'  
 done
