@@ -19,7 +19,7 @@ do
 	'
 
 	#echo -e "core$idx total usage: $total_per_core% "
-	printf "core %2d total usage: %5.1f %%\n" "$idx" "$total_per_core"
+	printf "core %2d: %3.1f %%\n" "$idx" "$total_per_core"
 	total_per_core=0	# 초기화
 
 done
