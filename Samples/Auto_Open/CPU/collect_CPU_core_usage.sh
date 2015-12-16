@@ -6,6 +6,17 @@ MAX_CORE=`cat /proc/cpuinfo | grep -c processor`
 
 ps -eo psr,pcpu,comm | sort -k 1 > $PS_RESULT 	# 실행 결과를 txt 파일에 저장함.
 
+#출력 결과의 header 설정
+function set_header()
+{
+	awk '
+	BEGIN {
+		printf("%2s %4s(%%) %10s\n", "Core", "Percent", "Chart") 
+	}'
+}
+
+set_header
+
 for ((idx=0; idx < $MAX_CORE; idx++))
 do
 	cat $PS_RESULT| sort -k 1 | awk '$1=='"${idx}"' {print $1, $2, $3}' > core$idx.txt
@@ -20,7 +31,6 @@ do
 	#AWK로 출력 포맷을 설정함
 	awk '
 	BEGIN {
-    	#printf("%2s %4s(%%) %10s\n", "Core", "Percent", "Chart") 
     	printf("%2d %5.1f(%%)", "'"$idx"'", "'"$total_per_core"'")  # core 번호 및 core 사용률을 출력함
 
     	printf("         ")
