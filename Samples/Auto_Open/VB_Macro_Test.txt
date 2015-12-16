@@ -19,6 +19,8 @@ Sub Auto_Open()
    get_Config_gathering_sysinfo
    Worksheets("Sheet1").Activate
    
+   시트3_이름_변경
+   
   
 End Sub
 
@@ -29,7 +31,6 @@ Function 시트2_이름_변경()
     Dim Sheet3_이름_변경 As String
     
     Sheet2_이름_변경 = "메모리_사용량_기록"
-    Sheet3_이름_변경 = "CPU_사용량_기록"
     
     '시트2 이름 변경
     If IsSheet(Sheet2_이름_변경) = True Then
@@ -163,6 +164,29 @@ Function 생성된_mem차트를_메인시트에_복사()
 
 End Function
 
+
+' CPU
+'-------------------------------
+
+Function 시트3_이름_변경()
+    
+    Dim Sheet3_이름_변경 As String
+    
+    Sheet3_이름_변경 = "CPU_사용량_기록"
+    
+    '시트3 이름 변경
+    If IsSheet(Sheet3_이름_변경) = True Then
+        'MsgBox "동일한 시트명이 존재합니다."
+        Worksheets(Sheet3_이름_변경).Activate
+    Else
+        Worksheets("Sheet3").Name = Sheet3_이름_변경
+    End If
+    
+    
+End Function
+
+
+' -----------------------------------
 
 
 'Config_gathering의 시스템 정보를 가져옴
