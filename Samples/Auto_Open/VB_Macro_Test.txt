@@ -5,7 +5,7 @@
  엑셀에서 전체 소스 확인 방법: Macro_Test.xlsm 실행 -> 개발자 도구 -> Visual Basic 항목 클릭.
 Public idx As Integer
 Public idx_cpu As Integer
-'Public Sheet3_이름_변경 As String
+Public 변경한_Sheet2_이름 As String
 Public 변경한_Sheet3_이름 As String
 
 
@@ -37,16 +37,16 @@ End Sub
 
 Function 시트2_이름_변경()
     
-    Dim Sheet2_이름_변경 As String
+    'Dim Sheet2_이름_변경 As String
     
-    Sheet2_이름_변경 = "메모리_사용량_기록"
+    변경한_Sheet2_이름 = "메모리_사용량_기록"
     
     '시트2 이름 변경
-    If IsSheet(Sheet2_이름_변경) = True Then
+    If IsSheet(변경한_Sheet2_이름) = True Then
         'MsgBox "동일한 시트명이 존재합니다."
-        Worksheets(Sheet2_이름_변경).Activate
+        Worksheets(변경한_Sheet2_이름).Activate
     Else
-        Worksheets("Sheet2").Name = Sheet2_이름_변경
+        Worksheets("Sheet2").Name = 변경한_Sheet2_이름
     End If
     
     
@@ -164,7 +164,7 @@ End Function
 Function 생성된_mem차트를_메인시트에_복사() '메인시트는 시트1을 의미함.
 
      ' 메모리_사용량_기록 시트의 차트를 Sheet1에 복사함.
-    Worksheets("메모리_사용량_기록").Activate
+    Worksheets(변경한_Sheet2_이름).Activate
     ActiveSheet.ChartObjects(1).Copy
     
     Worksheets("Sheet1").Activate
@@ -193,9 +193,6 @@ Function 시트3_이름_변경()
     
     
 End Function
-
-
-
 
 
 
