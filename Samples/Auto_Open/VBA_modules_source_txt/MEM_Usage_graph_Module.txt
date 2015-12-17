@@ -1,0 +1,102 @@
+'Hyeongwan Seo <westporch@gmail.com>
+'https://github.com/westporch/Creating_charts_using_VBA.git
+
+'메모리 사용량 파일의 데이터를 가져옴.
+Public Function get_mem_statistics()
+
+    Dim 불러_올_파일 As String
+    Dim 파일번호 As Integer
+    Dim 한줄 As String
+    Dim 배열 As Variant
+    
+    Worksheets(변경한_Sheet2_이름).Activate
+         
+    불러_올_파일 = ThisWorkbook.Path & "\" & "mem_statistics.csv"
+    파일번호 = FreeFile     ' In VB you can open files and then manipulate them using FreeFile
+ 
+    Range("A1").CurrentRegion.ClearContents
+ 
+    Open 불러_올_파일 For Input As #파일번호
+ 
+    idx = 0                 ' 전역 변수 초기화
+    
+    Do Until EOF(파일번호)
+ 
+        Line Input #파일번호, 한줄
+        배열 = Split(한줄, ",")
+ 
+        With Range("A1").Offset(idx)
+            .Resize(1, UBound(배열) + 1).Value = 배열   ' UBound 함수는 배열의 크기를 반환한다.
+        End With
+ 
+        idx = idx + 1
+    Loop
+ 
+    Close #파일번호
+ 
+    Range("A1").CurrentRegion.Columns.AutoFit
+    
+    
+End Function
+
+Public Function mem차트를_그릴_영역_선택()
+   
+   ' 1. 수집한 데이터 만큼 셀 영역을 선택함.
+    Range(Cells(1, 2), Cells(idx, 4)).Select
+    
+    ' 2. 그래프를 그리기 위해서 선택한 셀 영역의 서식을 숫자로 변경함.
+    With Selection
+        .NumberFormat = "0"
+        .Value = .Value
+    End With
+
+End Function
+
+Public Function mem차트_생성_후_크기위치_변경()
+
+    Dim 차트생성위치 As Range
+    Set 차트생성위치 = Range("F2:Q19")
+    
+    ActiveSheet.Shapes.AddChart.Select
+    
+    With ActiveChart
+        .ChartType = xlLine
+        
+        With .Parent
+            .Left = 차트생성위치.Left
+            .Top = 차트생성위치.Top
+            .Width = 차트생성위치.Width
+            .Height = 차트생성위치.Height
+            
+        End With
+        
+    End With
+    
+End Function
+
+Public Function mem차트_제목_설정()
+    
+    With ActiveSheet.ChartObjects(1).Chart
+        
+        .SetElement msoElementChartTitleAboveChart
+        
+        With .ChartTitle
+            .Text = "메모리 사용량"
+            .Format.TextFrame2.TextRange.Font.Size = 14
+        End With
+    
+    End With
+    
+End Function
+
+Public Function 생성된_mem차트를_메인시트에_복사() '메인시트는 시트1을 의미함.
+
+     ' 메모리_사용량_기록 시트의 차트를 Sheet1에 복사함.
+    Worksheets(변경한_Sheet2_이름).Activate
+    ActiveSheet.ChartObjects(1).Copy
+    
+    Worksheets("Sheet1").Activate
+    Range("A38").Select
+    ActiveSheet.Paste
+
+End Function
