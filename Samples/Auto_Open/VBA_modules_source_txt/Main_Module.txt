@@ -17,6 +17,10 @@ Sub Auto_Open()
     시트3_이름_변경
     시트의_셀_초기화
     
+    'config_gathering 정보 출력
+   get_Config_gathering_sysinfo
+   'Worksheets("Sheet1").Activate
+    
     '메모리 사용량 그래프를 그린다
    get_mem_statistics
    mem차트를_그릴_영역_선택
@@ -24,9 +28,6 @@ Sub Auto_Open()
    mem차트_제목_설정
    생성된_mem차트를_메인시트에_복사
    
-   'config_gathering 정보 출력
-   get_Config_gathering_sysinfo
-   Worksheets("Sheet1").Activate
    
    'CPU 사용량 그래프를 그린다
    get_cpu_statistics
@@ -92,10 +93,10 @@ Function get_Config_gathering_sysinfo()
      ' Config_gathering의 불필요한 정보 삭제 (시스템 정보만 남기기 위한 작업)
     Workbooks.Open Filename:="C:\Temp\201512071330_config_gathering.txt"
        
-    With Range("A37:A3000")
-        .Select
-        .Delete Shift:=xlShiftUp
-    End With
+  '  With Range("A37:A3000")
+   '     .Select
+   '     .Delete Shift:=xlShiftUp
+   ' End With
 
     ' Config_gathering의 시스템 정보 부분만 선택 후 복사
     With Range("A1:A36")
@@ -107,6 +108,6 @@ Function get_Config_gathering_sysinfo()
     Workbooks("201512071330_config_gathering.txt").Close SaveChanges:=False
    
    ' 복사한 셀을 붙여넣는다.
-   ActiveSheet.Paste Destination:=Worksheets("Sheet1").Range("A1")
+   ActiveSheet.Paste Destination:=Worksheets("Sheet1").Range("A5")
    
 End Function
