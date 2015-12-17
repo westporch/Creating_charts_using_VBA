@@ -62,7 +62,7 @@ Public Function cpu차트_생성_후_크기위치_변경()
     Dim cpu차트_생성_위치 As Range
     Dim cpu차트 As Chart
     
-    Set cpu차트_생성_위치 = Range("R2:Z27")
+    Set cpu차트_생성_위치 = Range("R2:AM23")
     
     ActiveSheet.Shapes.AddChart.Select
     
@@ -114,7 +114,7 @@ Function 생성된_cpu차트를_메인시트에_복사() '메인시트는 시트1을 의미함.
     ActiveSheet.ChartObjects(1).Copy
     
     Worksheets("Sheet1").Activate
-    Range("A59").Select
+    Range("A70").Select
     ActiveSheet.Paste
 
 End Function
