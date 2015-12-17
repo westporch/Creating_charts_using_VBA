@@ -55,7 +55,7 @@ End Function
 Public Function mem차트_생성_후_크기위치_변경()
 
     Dim 차트생성위치 As Range
-    Set 차트생성위치 = Range("F2:Q19")
+    Set 차트생성위치 = Range("F2:AA17")
     
     ActiveSheet.Shapes.AddChart.Select
     
@@ -96,7 +96,7 @@ Public Function 생성된_mem차트를_메인시트에_복사() '메인시트는 시트1을 의미함.
     ActiveSheet.ChartObjects(1).Copy
     
     Worksheets("Sheet1").Activate
-    Range("A38").Select
+    Range("A51").Select '메모리 사용량 그래프의 좌측 하단이 A50으로 설정됨.
     ActiveSheet.Paste
 
 End Function
