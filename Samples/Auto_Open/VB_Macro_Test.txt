@@ -23,6 +23,7 @@ Sub Auto_Open()
    시트3_이름_변경
    get_cpu_statistics
    cpu차트를_그릴_영역_선택
+   cpu차트_생성_후_크기위치_변경
    
   
 End Sub
@@ -272,5 +273,39 @@ Function cpu차트를_그릴_영역_선택()
         .NumberFormat = "0"
         .Value = .Value
     End With
+    
+End Function
+
+Function cpu차트_생성_후_크기위치_변경()
+
+    Dim cpu차트_생성_위치 As Range
+    Dim cpu차트 As Chart
+    
+    Set cpu차트_생성_위치 = Range("R2:Z27")
+    
+    ActiveSheet.Shapes.AddChart.Select
+    
+    With ActiveChart
+        .ChartType = xlBarClustered
+        
+        With .Parent
+            .Left = cpu차트_생성_위치.Left
+            .Top = cpu차트_생성_위치.Top
+            .Width = cpu차트_생성_위치.Width
+            .Height = cpu차트_생성_위치.Height
+            
+        End With
+        
+    End With
+    
+    'cpu 차트 축 값의 최댓값을 100으로 수정함
+    Set cpu차트 = ActiveSheet.ChartObjects(1).Chart
+    
+    With cpu차트.Axes(Type:=xlValue)
+        
+        .MaximumScale = 100
+        
+    End With
+    
     
 End Function
