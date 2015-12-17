@@ -1,0 +1,120 @@
+'Hyeongwan Seo <westporch@gmail.com>
+'https://github.com/westporch/Creating_charts_using_VBA.git
+
+'CPU 사용량 파일의 데이터를 가져옴.
+Public Function get_cpu_statistics()
+
+    Dim 불러_올_파일 As String
+    Dim 파일번호 As Integer
+    Dim 한줄 As String
+    Dim 배열 As Variant
+    
+    Worksheets(변경한_Sheet3_이름).Activate
+         
+    불러_올_파일 = ThisWorkbook.Path & "\" & "cpu_statistics.csv"
+    파일번호 = FreeFile     ' In VB you can open files and then manipulate them using FreeFile
+ 
+    Range("A1").CurrentRegion.ClearContents
+ 
+    Open 불러_올_파일 For Input As #파일번호
+ 
+    idx_cpu = 0                 ' 전역 변수 초기화
+    
+    Do Until EOF(파일번호)
+ 
+        Line Input #파일번호, 한줄
+        배열 = Split(한줄, ",")
+ 
+        With Range("A1").Offset(idx_cpu)
+            .Resize(1, UBound(배열) + 1).Value = 배열   ' UBound 함수는 배열의 크기를 반환한다.
+        End With
+ 
+        idx_cpu = idx_cpu + 1
+    Loop
+ 
+    Close #파일번호
+ 
+    Range("A1").CurrentRegion.Columns.AutoFit
+    
+    
+End Function
+
+Public Function cpu차트를_그릴_영역_선택()
+
+    Dim 코어_개수 As Integer
+    코어_개수 = Sheet3.Cells(1, Columns.Count).End(xlToLeft).Column 'Sheet3의 non-blank 열의 개수를 구함
+    'MsgBox 코어_개수
+
+   
+   ' 1. 수집한 코어 개수 만큼 셀 영역을 선택함.
+    Range(Cells(1, 코어_개수), Cells(2, 1)).Select
+    
+    ' 2. 그래프를 그리기 위해서 선택한 셀 영역의 서식을 숫자로 변경함.
+    With Selection
+        .NumberFormat = "0"
+        .Value = .Value
+    End With
+    
+End Function
+
+Public Function cpu차트_생성_후_크기위치_변경()
+
+    Dim cpu차트_생성_위치 As Range
+    Dim cpu차트 As Chart
+    
+    Set cpu차트_생성_위치 = Range("R2:Z27")
+    
+    ActiveSheet.Shapes.AddChart.Select
+    
+    With ActiveChart
+        .ChartType = xlBarClustered
+        
+        With .Parent
+            .Left = cpu차트_생성_위치.Left
+            .Top = cpu차트_생성_위치.Top
+            .Width = cpu차트_생성_위치.Width
+            .Height = cpu차트_생성_위치.Height
+        End With
+        
+    End With
+    
+    'cpu 차트 축 값의 최댓값을 100으로 수정함
+    Set cpu차트 = ActiveSheet.ChartObjects(1).Chart
+    
+    With cpu차트.Axes(Type:=xlValue)
+        .MaximumScale = 100
+    End With
+    
+    'cpu 차트의 불필요한 범례를 표시하지 않음.
+    With cpu차트
+        .HasLegend = False
+    End With
+    
+End Function
+
+Public Function cpu차트_제목_설정()
+    
+    With ActiveSheet.ChartObjects(1).Chart
+        
+        .SetElement msoElementChartTitleAboveChart
+        
+        With .ChartTitle
+            .Text = "CPU core별 사용량"
+            .Format.TextFrame2.TextRange.Font.Size = 14
+        End With
+    
+    End With
+    
+End Function
+
+Function 생성된_cpu차트를_메인시트에_복사() '메인시트는 시트1을 의미함.
+
+     ' 메모리_사용량_기록 시트의 차트를 Sheet1에 복사함.
+    Worksheets(변경한_Sheet3_이름).Activate
+    ActiveSheet.ChartObjects(1).Copy
+    
+    Worksheets("Sheet1").Activate
+    Range("A59").Select
+    ActiveSheet.Paste
+
+End Function
