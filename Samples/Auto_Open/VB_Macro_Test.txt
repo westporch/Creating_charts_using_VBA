@@ -12,11 +12,12 @@ Public 변경한_Sheet3_이름 As String
 
 '엑셀 실행 시 호출되는 Auto_Open()을 재정의함.
 Sub Auto_Open()
-    
+
+    시트2_이름_변경
+    시트3_이름_변경
     시트의_셀_초기화
     
     '메모리 사용량 그래프를 그린다
-   시트2_이름_변경
    get_mem_statistics
    mem차트를_그릴_영역_선택
    mem차트_생성_후_크기위치_변경
@@ -28,7 +29,6 @@ Sub Auto_Open()
    Worksheets("Sheet1").Activate
    
    'CPU 사용량 그래프를 그린다
-   시트3_이름_변경
    get_cpu_statistics
    cpu차트를_그릴_영역_선택
    cpu차트_생성_후_크기위치_변경
@@ -39,9 +39,10 @@ End Sub
 
 '전체 데이터 시트의 셀을 삭제한다.
 Function 시트의_셀_초기화()
+
     Sheets("Sheet1").Cells.Delete
-    Sheets("CPU_사용량_기록").Cells.Delete
     Sheets("메모리_사용량_기록").Cells.Delete
+    Sheets("CPU_사용량_기록").Cells.Delete
     
 End Function
 
@@ -78,6 +79,8 @@ Function get_mem_statistics()
     Dim 파일번호 As Integer
     Dim 한줄 As String
     Dim 배열 As Variant
+    
+    Worksheets(변경한_Sheet2_이름).Activate
          
     불러_올_파일 = ThisWorkbook.Path & "\" & "mem_statistics.csv"
     파일번호 = FreeFile     ' In VB you can open files and then manipulate them using FreeFile
@@ -224,6 +227,8 @@ Function get_cpu_statistics()
     Dim 파일번호 As Integer
     Dim 한줄 As String
     Dim 배열 As Variant
+    
+    Worksheets(변경한_Sheet3_이름).Activate
          
     불러_올_파일 = ThisWorkbook.Path & "\" & "cpu_statistics.csv"
     파일번호 = FreeFile     ' In VB you can open files and then manipulate them using FreeFile
@@ -332,4 +337,4 @@ Function 생성된_cpu차트를_메인시트에_복사() '메인시트는 시트
     Range("A59").Select
     ActiveSheet.Paste
 
-End Function
+End Function 
