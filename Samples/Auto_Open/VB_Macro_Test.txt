@@ -10,6 +10,7 @@ Public idx_cpu As Integer
 '엑셀 실행 시 호출되는 Auto_Open()을 재정의함.
 Sub Auto_Open()
     
+    '메모리
    시트2_이름_변경
    get_mem_statistics
    mem차트를_그릴_영역_선택
@@ -20,10 +21,12 @@ Sub Auto_Open()
    get_Config_gathering_sysinfo
    Worksheets("Sheet1").Activate
    
+   'CPU
    시트3_이름_변경
    get_cpu_statistics
    cpu차트를_그릴_영역_선택
    cpu차트_생성_후_크기위치_변경
+   cpu차트_제목_설정
    
   
 End Sub
@@ -307,5 +310,20 @@ Function cpu차트_생성_후_크기위치_변경()
         
     End With
     
+    
+End Function
+
+Function cpu차트_제목_설정()
+    
+    With ActiveSheet.ChartObjects(1).Chart
+        
+        .SetElement msoElementChartTitleAboveChart
+        
+        With .ChartTitle
+            .Text = "CPU core별 사용량"
+            .Format.TextFrame2.TextRange.Font.Size = 14
+        End With
+    
+    End With
     
 End Function
