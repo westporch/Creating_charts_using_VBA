@@ -3,17 +3,19 @@
 'https://github.com/westporch/Creating_charts_using_VBA.git
 'Macro_Test.xlsm.txt파일은 Macro_test.xlsm의 VBA 소스를 txt로 정리한 것 입니다. _
  엑셀에서 전체 소스 확인 방법: Macro_Test.xlsm 실행 -> 개발자 도구 -> Visual Basic 항목 클릭.
+ 
 Public idx As Integer
 Public idx_cpu As Integer
 Public 변경한_Sheet2_이름 As String
 Public 변경한_Sheet3_이름 As String
 
 
-
 '엑셀 실행 시 호출되는 Auto_Open()을 재정의함.
 Sub Auto_Open()
     
-    '메모리
+    시트의_셀_초기화
+    
+    '메모리 사용량 그래프를 그린다
    시트2_이름_변경
    get_mem_statistics
    mem차트를_그릴_영역_선택
@@ -21,10 +23,11 @@ Sub Auto_Open()
    mem차트_제목_설정
    생성된_mem차트를_메인시트에_복사
    
+   'config_gathering 정보 출력
    get_Config_gathering_sysinfo
    Worksheets("Sheet1").Activate
    
-   'CPU
+   'CPU 사용량 그래프를 그린다
    시트3_이름_변경
    get_cpu_statistics
    cpu차트를_그릴_영역_선택
@@ -34,10 +37,16 @@ Sub Auto_Open()
    
 End Sub
 
+'전체 데이터 시트의 셀을 삭제한다.
+Function 시트의_셀_초기화()
+    Sheets("Sheet1").Cells.Delete
+    Sheets("CPU_사용량_기록").Cells.Delete
+    Sheets("메모리_사용량_기록").Cells.Delete
+    
+End Function
+
 
 Function 시트2_이름_변경()
-    
-    'Dim Sheet2_이름_변경 As String
     
     변경한_Sheet2_이름 = "메모리_사용량_기록"
     
@@ -69,14 +78,6 @@ Function get_mem_statistics()
     Dim 파일번호 As Integer
     Dim 한줄 As String
     Dim 배열 As Variant
-    
-    'Dim idx As Integer
-
-    'Sheet2의 이름을 변경함.
-    'With Worksheets("Sheet2")
-     '   .Activate
-     '   .Name = "메모리 사용량 기록"
-    'End With
          
     불러_올_파일 = ThisWorkbook.Path & "\" & "mem_statistics.csv"
     파일번호 = FreeFile     ' In VB you can open files and then manipulate them using FreeFile
@@ -116,11 +117,6 @@ Function mem차트를_그릴_영역_선택()
         .NumberFormat = "0"
         .Value = .Value
     End With
-    
-   ' With ActiveSheet
-    '    .Shapes.AddChart
-     '   .ChartObjects(1).Chart.ChartType = xlLineMarkers    ' 차트 종류를 변경함
-    'End With
 
 End Function
 
@@ -179,8 +175,6 @@ End Function
 
 Function 시트3_이름_변경()
     
-    'Dim Sheet3_이름_변경 As String
-    
     변경한_Sheet3_이름 = "CPU_사용량_기록"
     
     '시트3 이름 변경
@@ -190,7 +184,6 @@ Function 시트3_이름_변경()
     Else
         Worksheets("Sheet3").Name = 변경한_Sheet3_이름
     End If
-    
     
 End Function
 
