@@ -296,7 +296,6 @@ Function cpu차트_생성_후_크기위치_변경()
             .Top = cpu차트_생성_위치.Top
             .Width = cpu차트_생성_위치.Width
             .Height = cpu차트_생성_위치.Height
-            
         End With
         
     End With
@@ -305,11 +304,13 @@ Function cpu차트_생성_후_크기위치_변경()
     Set cpu차트 = ActiveSheet.ChartObjects(1).Chart
     
     With cpu차트.Axes(Type:=xlValue)
-        
         .MaximumScale = 100
-        
     End With
     
+    'cpu 차트의 불필요한 범례를 표시하지 않음.
+    With cpu차트
+        .HasLegend = False
+    End With
     
 End Function
 
