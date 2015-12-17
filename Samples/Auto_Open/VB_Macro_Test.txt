@@ -27,8 +27,8 @@ Sub Auto_Open()
    cpu차트를_그릴_영역_선택
    cpu차트_생성_후_크기위치_변경
    cpu차트_제목_설정
+   생성된_cpu차트를_메인시트에_복사
    
-  
 End Sub
 
 
@@ -159,7 +159,7 @@ Function mem차트_제목_설정()
     
 End Function
 
-Function 생성된_mem차트를_메인시트에_복사()
+Function 생성된_mem차트를_메인시트에_복사() '메인시트는 시트1을 의미함.
 
      ' 메모리_사용량_기록 시트의 차트를 Sheet1에 복사함.
     Worksheets("메모리_사용량_기록").Activate
@@ -327,4 +327,16 @@ Function cpu차트_제목_설정()
     
     End With
     
+End Function
+
+Function 생성된_cpu차트를_메인시트에_복사() '메인시트는 시트1을 의미함.
+
+     ' 메모리_사용량_기록 시트의 차트를 Sheet1에 복사함.
+    Worksheets("CPU_사용량_기록").Activate
+    ActiveSheet.ChartObjects(1).Copy
+    
+    Worksheets("Sheet1").Activate
+    Range("A59").Select
+    ActiveSheet.Paste
+
 End Function
