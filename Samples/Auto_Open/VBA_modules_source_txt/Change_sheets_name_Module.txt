@@ -1,0 +1,41 @@
+'Hyeongwan Seo <westporch@gmail.com>
+'https://github.com/westporch/Creating_charts_using_VBA.git
+
+Public Function IsSheet(시트명 As String) As Boolean
+    
+    Dim 시트 As Worksheet
+    
+    On Error Resume Next
+        Set 시트 = Worksheets(시트명)
+        IsSheet = (Err.Number = 0)      ' 리턴값이 저장됨.
+        
+End Function
+
+Public Function 시트2_이름_변경()
+    
+    변경한_Sheet2_이름 = "메모리_사용량_기록"
+    
+    '시트2 이름 변경
+    If IsSheet(변경한_Sheet2_이름) = True Then
+        'MsgBox "동일한 시트명이 존재합니다."
+        Worksheets(변경한_Sheet2_이름).Activate
+    Else
+        Worksheets("Sheet2").Name = 변경한_Sheet2_이름
+    End If
+    
+    
+End Function
+
+Public Function 시트3_이름_변경()
+    
+    변경한_Sheet3_이름 = "CPU_사용량_기록"
+    
+    '시트3 이름 변경
+    If IsSheet(변경한_Sheet3_이름) = True Then
+        'MsgBox "동일한 시트명이 존재합니다."
+        Worksheets(변경한_Sheet3_이름).Activate
+    Else
+        Worksheets("Sheet3").Name = 변경한_Sheet3_이름
+    End If
+    
+End Function
