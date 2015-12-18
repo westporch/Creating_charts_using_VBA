@@ -1,0 +1,18 @@
+'Hyeongwan Seo <westporch@gmail.com>
+'https://github.com/westporch/Creating_charts_using_VBA.git
+
+Public Function 제목_설정()
+
+    Worksheets("Sheet1").Activate
+    Range("B1:U3").Merge    '셀 병합
+    
+    Cells(1, 2).Value = "시스템 보고서"
+    Cells(1, 2).HorizontalAlignment = xlCenter  '제목을 가운데 정렬함
+    
+    '제목 폰트 설정
+    With Range("B1:U3").Font
+        .Bold = True
+        .Size = 43
+    End With
+    
+End Function
