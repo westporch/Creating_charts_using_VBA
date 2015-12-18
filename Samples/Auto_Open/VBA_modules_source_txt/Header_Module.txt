@@ -6,8 +6,10 @@ Public Function 제목_설정()
     Worksheets("Sheet1").Activate
     Range("B1:U3").Merge    '셀 병합
     
-    Cells(1, 2).Value = "시스템 보고서"
-    Cells(1, 2).HorizontalAlignment = xlCenter  '제목을 가운데 정렬함
+    With Cells(1, 2)
+        .Value = "시스템 보고서"    '제목을 설정함
+        .HorizontalAlignment = xlCenter  '제목을 가운데 정렬함
+    End With
     
     '제목 폰트 설정
     With Range("B1:U3").Font
