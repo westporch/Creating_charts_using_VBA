@@ -18,3 +18,17 @@ Public Function 제목_설정()
     End With
     
 End Function
+
+Public Function 현재_날짜와_시간_출력()
+    
+    With Cells(4, 20)
+        .HorizontalAlignment = xlCenter  '날짜를 가운데 정렬함
+    End With
+    
+    With Range("T4:U4")
+        .Merge                '셀 병합
+        .Formula = "=NOW()"   '현재 날짜와 시간을 지정함.
+        .Font.Size = 12       '폰트 크기를 설정함.
+    End With
+    
+End Function
