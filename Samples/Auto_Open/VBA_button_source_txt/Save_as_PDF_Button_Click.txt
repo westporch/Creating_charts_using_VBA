@@ -1,0 +1,32 @@
+Option Explicit
+
+
+'엑셀 매크로 & VBA 바이블 책의 p439 소스를 사용함.
+
+Private Sub PDF저장_Click()
+    
+    Dim 파일 As Variant
+    Dim 파일형식 As String
+    
+    파일형식 = "PDF 파일 (*.pdf), *.pdf"
+    
+    파일 = Application.GetSaveAsFilename(FileFilter:=파일형식, Title:="PDF 파일로 저장")
+    
+    If 파일 <> False Then
+    
+        On Error Resume Next
+        
+        ActiveSheet.ExportAsFixedFormat Type:=xlTypePDF, _
+                                         Filename:=파일, _
+                                         Quality:=xlQualityStandard, _
+                                         IncludeDocProperties:=True, _
+                                         IgnorePrintAreas:=True, _
+                                         OpenAfterPublish:=False
+                                         
+        If Err.Number = 0 Then
+            MsgBox "파일을 저장했습니다." & vbCr & vbCr & 파일
+        End If
+        
+    End If
+     
+End Sub
