@@ -97,5 +97,4 @@ if [ "$1" == "stop" ];then
     pkill collect_CPU_usage.sh   # 데이터 수집을 중지함
 else
     print_data
-	:
 fi
