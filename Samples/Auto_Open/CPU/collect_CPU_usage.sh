@@ -30,7 +30,7 @@ function print_data()
 
 		for ((idx=1; idx <= $CPU_CORE_NUM; idx++))
 		do
-			cpu_core_usage[$idx]=`cat $SAR_RESULT | sed -e '1,4d' -e '21,39d' | awk '{print $4+$5}' | head -n $idx | tail -n 1`	
+			cpu_core_usage[$idx]=`cat $SAR_RESULT | sed -e '1,4d' -e '21,39d' | awk '{print $4+$5+$6}' | head -n $idx | tail -n 1`	
 		done
 
 		rm -rf $SAR_RESULT	#sar 명령어 수집 정보를 삭제함.
